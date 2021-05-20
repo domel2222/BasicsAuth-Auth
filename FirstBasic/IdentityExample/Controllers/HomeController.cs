@@ -68,11 +68,17 @@ namespace IdentityExample.Controllers
                     //var resetPassword = _userManager.GeneratePasswordResetTokenAsync();
                     var codeEmail = await _userManager.GenerateEmailConfirmationTokenAsync(user);
 
+                    var link = Url.Action(nameof(VerifyEmail), "Home", new { userId = user.Id, codeEmail });
+                    return RedirectToAction("EmailVeryfication");
                 }
             }
             return RedirectToAction("Index");
         }
 
+        public async Task<IActionResult> VerifyEmail(string userId, string code)
+        {
+            return View();
+        }
         public IActionResult EmailVarificarion() => View();
 
         public IActionResult Login()
