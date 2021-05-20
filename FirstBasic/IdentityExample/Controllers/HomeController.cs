@@ -27,6 +27,8 @@ namespace IdentityExample.Controllers
         {
             return View();
         }
+
+        [HttpPost]
         public async Task<IActionResult> Login(string userName, string password)
         {
             //login functionality
@@ -43,6 +45,7 @@ namespace IdentityExample.Controllers
             }
             return RedirectToAction("Index");
         }
+        [HttpPost]
         public async Task<IActionResult> Register(string userName, string password)
         {
             //register functionality
@@ -60,11 +63,17 @@ namespace IdentityExample.Controllers
                 var signInResult = await _signInManager.PasswordSignInAsync(user, password, false, false);
                 if (signInResult.Succeeded)
                 {
-                    return RedirectToAction("Index");
+                    //return RedirectToAction("Index");
+                    //generation of the email token
+                    //var resetPassword = _userManager.GeneratePasswordResetTokenAsync();
+                    var codeEmail = await _userManager.GenerateEmailConfirmationTokenAsync(user);
+
                 }
             }
             return RedirectToAction("Index");
         }
+
+        public IActionResult EmailVarificarion() => View();
 
         public IActionResult Login()
         {
