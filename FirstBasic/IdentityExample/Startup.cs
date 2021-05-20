@@ -63,7 +63,8 @@ namespace IdentityExample
             //    var option = new MailKitOptions();
             //    config.UseMailKit(mailKitOption);
             //}
-            services.AddMailKit(config => config.UseMailKit(_configuration.GetSection("Emial").Get<MailKitOptions>()));
+            var mailKitOption = _configuration.GetSection("Email").Get<MailKitOptions>();
+            services.AddMailKit(config => config.UseMailKit(mailKitOption));
             services.AddControllersWithViews();
         }
 
