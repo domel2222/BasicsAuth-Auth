@@ -1,3 +1,5 @@
+using Basics.AuthorizationRequirements;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
@@ -6,6 +8,7 @@ using Microsoft.Extensions.Hosting;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Security.Claims;
 using System.Threading.Tasks;
 
 namespace Basics
@@ -23,7 +26,41 @@ namespace Basics
                     config.LoginPath = "/Home/Authenticate";
                 });
 
+            services.AddAuthorization(configure =>
+            {
+
+                //policy under the hood
+                //var defaultAuthBuilder = new AuthorizationPolicyBuilder();
+                //var defaultAuthPolicy = defaultAuthBuilder
+                //    .RequireAuthenticatedUser()
+                //    .RequireClaim(ClaimTypes.DateOfBirth)
+                //    .Build();
+
+                //configure.DefaultPolicy = defaultAuthPolicy;
+
+                //configure.AddPolicy("Claim.DoB", policyBuilder =>
+                //{
+                //    policyBuilder.RequireClaim(ClaimTypes.DateOfBirth);
+                //}
+                //);
+
+                //configure.AddPolicy("Claim.DoB", policyBuilder =>
+                //{
+                //    policyBuilder.AddRequirements(new CustomRequireClaims(ClaimTypes.DateOfBirth));
+                //}
+
+                configure.AddPolicy("Admin", policyBuilder => policyBuilder.RequireClaim(ClaimTypes.Role, "Admin"));
+
+                configure.AddPolicy("Claim.DoB", policyBuilder =>
+                {
+                    policyBuilder.RequireCustomClaim(ClaimTypes.DateOfBirth);
+                }
+
+);
+            });
+
             services.AddControllersWithViews();
+            services.AddScoped<IAuthorizationHandler, CustomRequireClaimsHandler>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -34,7 +71,7 @@ namespace Basics
                 app.UseDeveloperExceptionPage();
             }
 
-            
+
 
             app.UseRouting();
 
@@ -45,7 +82,7 @@ namespace Basics
             //are you allowed?
             app.UseAuthorization();
 
-            
+
             app.UseEndpoints(endpoints =>
             {
                 endpoints.MapDefaultControllerRoute();
