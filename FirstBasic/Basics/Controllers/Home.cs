@@ -41,6 +41,8 @@ namespace Basics.Controllers
         {
             return View("Secret");
         }
+
+        [AllowAnonymous]
         public IActionResult Authenticate()
         {
             var supaClaims = new List<Claim>()

@@ -4,6 +4,7 @@
 @Context
 @User
 
+@*   Simple access quick checks  *@
 @if (User.Identity.IsAuthenticated)
 {
     <h1>User is authenticated</h1>
@@ -13,6 +14,8 @@ else
     <h1>User is not authenticated</h1>
 }
 
+
+@** Big guns resuable functions *@
 @using Microsoft.AspNetCore.Authorization
 @inject IAuthorizationService authorizationService
 
