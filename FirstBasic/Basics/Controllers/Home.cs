@@ -12,12 +12,12 @@ namespace Basics.Controllers
 {
     public class Home : Controller
     {
-        private readonly IAuthorizationService _authorizationService;
+        //private readonly IAuthorizationService _authorizationService;
 
-        public Home(IAuthorizationService authorizationService)
-        {
-            this._authorizationService = authorizationService;
-        }
+        //public Home(IAuthorizationService authorizationService)
+        //{
+        //    this._authorizationService = authorizationService;
+        //}
 
         public IActionResult Index()
         {
@@ -71,7 +71,7 @@ namespace Basics.Controllers
             return RedirectToAction("Index");
         }
 
-        public async Task<IActionResult> DoTheDishes()
+        public async Task<IActionResult> DoTheDishes([FromServices] IAuthorizationService _authorizationService)  // Iauthorization localy only for this method
         {
 
             // we are doing stuff here 
@@ -84,7 +84,7 @@ namespace Basics.Controllers
 
             if (authResult.Succeeded)
             {
-
+                return View("Index");
             }
             return View("Index");
         }

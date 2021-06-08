@@ -22,7 +22,7 @@ namespace Basics
             services.AddAuthentication("CookieAuth")
                 .AddCookie("CookieAuth", config =>
                 {
-                    config.Cookie.Name = "Grandmas.Cookie";
+                    config.Cookie.Name = "My.Cookie";
                     config.LoginPath = "/Home/Authenticate";
                 });
 
