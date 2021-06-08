@@ -11,17 +11,52 @@ namespace Basics.Controllers
 {
     public class OperationsController : Controller
     {
-        
+        private readonly IAuthorizationService _authorizationService;
+
+        public OperationsController(IAuthorizationService authorizationService)
+        {
+            this._authorizationService = authorizationService;
+        }
+
+        public async Task<IActionResult> Open()
+        {
+
+            var wookieBox = new WookieBox();   // get wookie box from db
+            var requrment = new OperationAuthorizationRequirement()
+            {
+                Name = WookieBoxOperation.Open
+            };
+
+            //await _authorizationService.AuthorizeAsync(User, null, requrment);
+            await _authorizationService.AuthorizeAsync(User, wookieBox, requrment);
+            return View();
+        }
     }
 
     public class WokkieBoxAuthorizationHandler :
-        AuthorizationHandler<OperationAuthorizationRequirement>
+        AuthorizationHandler<OperationAuthorizationRequirement, WookieBox>
     {
         protected override Task HandleRequirementAsync(
             AuthorizationHandlerContext context, 
-            OperationAuthorizationRequirement requirement)
+            OperationAuthorizationRequirement requirement,
+            WookieBox wookieBox)
         {
-            
+            if(requirement.Name == WookieBoxOperation.Look)
+            {
+                if (context.User.Identity.IsAuthenticated)
+                {
+                    context.Succeed(requirement);
+                }
+            }
+            else if(requirement.Name == WookieBoxOperation.Look)
+            {
+                if(context.User.HasClaim("Friend", "Good"))
+                {
+                    context.Succeed(requirement);
+                }
+            }
+
+            return Task.CompletedTask;
         }
     }
 
@@ -34,5 +69,11 @@ namespace Basics.Controllers
         public static string Look = "Look";
 
 
+    }
+
+
+    public class WookieBox
+    {
+        public string Name { get; set; }
     }
 }
