@@ -1,4 +1,5 @@
 using Basics.AuthorizationRequirements;
+using Basics.Controllers;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
@@ -74,6 +75,7 @@ namespace Basics
             }
                 );
             services.AddScoped<IAuthorizationHandler, CustomRequireClaimsHandler>();
+            services.AddScoped<IAuthorizationHandler, WokkieBoxAuthorizationHandler>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

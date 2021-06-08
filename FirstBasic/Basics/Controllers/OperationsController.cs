@@ -22,13 +22,14 @@ namespace Basics.Controllers
         {
 
             var wookieBox = new WookieBox();   // get wookie box from db
-            var requrment = new OperationAuthorizationRequirement()
-            {
-                Name = WookieBoxOperation.Open
-            };
+            //var requrment = new OperationAuthorizationRequirement()
+            //{
+            //    Name = WookieBoxOperation.Open
+            //};
 
             //await _authorizationService.AuthorizeAsync(User, null, requrment);
-            await _authorizationService.AuthorizeAsync(User, wookieBox, requrment);
+            //await _authorizationService.AuthorizeAsync(User, wookieBox, requrment);
+            await _authorizationService.AuthorizeAsync(User, wookieBox, WookieBoxAuthOperations.Open);
             return View();
         }
     }
@@ -60,6 +61,15 @@ namespace Basics.Controllers
         }
     }
 
+
+
+    public static class WookieBoxAuthOperations
+    {
+        public static OperationAuthorizationRequirement Open = new OperationAuthorizationRequirement
+        {
+            Name = WookieBoxOperation.Open
+        };
+    }
 
     public static class WookieBoxOperation
     {
