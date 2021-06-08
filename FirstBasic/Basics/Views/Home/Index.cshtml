@@ -1,10 +1,11 @@
 ﻿<h1>Home Page</h1>
 
 
-@Context
-@User
+@*Context
+    @User*@
 
 @*   Simple access quick checks  *@
+@*@if (User.Identity.Name == "parówa")*@
 @if (User.Identity.IsAuthenticated)
 {
     <h1>User is authenticated</h1>
