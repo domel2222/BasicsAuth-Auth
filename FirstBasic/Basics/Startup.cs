@@ -82,6 +82,7 @@ namespace Basics
                 .AddRazorPagesOptions(config =>
                 {
                     config.Conventions.AuthorizePage("/Razor/SecuredPage");
+                    config.Conventions.AuthorizePage("/Razor/policy", "Admin");
                 }    
                 );
 
