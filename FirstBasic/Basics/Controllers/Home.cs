@@ -30,6 +30,7 @@ namespace Basics.Controllers
         }
 
         [Authorize(Policy = "Claim.DoB")]
+        [Authorize(Policy = "SecurityLevel.5")]
         public IActionResult SecretPolicy()
         {
             return View("Secret");
