@@ -7,6 +7,12 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Basics", "Basics.csproj", "
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "IdentityExample", "..\IdentityExample\IdentityExample.csproj", "{908D0D03-F3AF-494C-B0D6-C2D07381C9EB}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "basicAndIdentity", "basicAndIdentity", "{24F28C02-BAB9-4C2D-B253-1CF1F0700E72}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "OAuth", "OAuth", "{3B031501-412E-4C4C-83F4-9DF527A767B8}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Server", "..\Server\Server.csproj", "{2C1902E4-4190-43C0-AA1C-733B4C76F130}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -21,9 +27,18 @@ Global
 		{908D0D03-F3AF-494C-B0D6-C2D07381C9EB}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{908D0D03-F3AF-494C-B0D6-C2D07381C9EB}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{908D0D03-F3AF-494C-B0D6-C2D07381C9EB}.Release|Any CPU.Build.0 = Release|Any CPU
+		{2C1902E4-4190-43C0-AA1C-733B4C76F130}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{2C1902E4-4190-43C0-AA1C-733B4C76F130}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{2C1902E4-4190-43C0-AA1C-733B4C76F130}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{2C1902E4-4190-43C0-AA1C-733B4C76F130}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{5879BE67-6580-40CF-BD2A-BCF784090834} = {24F28C02-BAB9-4C2D-B253-1CF1F0700E72}
+		{908D0D03-F3AF-494C-B0D6-C2D07381C9EB} = {24F28C02-BAB9-4C2D-B253-1CF1F0700E72}
+		{2C1902E4-4190-43C0-AA1C-733B4C76F130} = {3B031501-412E-4C4C-83F4-9DF527A767B8}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {4ABE23B7-B846-423B-B5FC-53A610A2CC1D}
