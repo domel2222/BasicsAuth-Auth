@@ -1,7 +1,10 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.IdentityModel.Tokens;
+using System;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
+using System.Text;
 
 namespace Server.Controllers
 {
@@ -31,8 +34,27 @@ namespace Server.Controllers
 
             //JsonConvert.DeserializeObject<TypeFilterAttribute>
 
-            var token = new JwtSecurityToken();
-            return RedirectToAction("Index");
+
+            var secretBytes = Encoding.UTF8.GetBytes(Constants.Secret);
+            var key = new SymmetricSecurityKey(secretBytes);
+            var algorithm = SecurityAlgorithms.HmacSha256;
+
+
+            var signingCredencial = new SigningCredentials(key, algorithm);
+
+            var token = new JwtSecurityToken(
+                Constants.Issuer,
+                Constants.Audiance,
+                claims,
+                notBefore: DateTime.Now,
+                expires: DateTime.Now.AddHours(1),
+                signingCredencial
+                ) ;
+
+            var tokenJson = new JwtSecurityTokenHandler().WriteToken(token);
+
+            return Ok(new { access_token = tokenJson });
+            //return RedirectToAction("Index");
         }
 
 
