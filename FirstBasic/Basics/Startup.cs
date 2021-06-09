@@ -78,7 +78,12 @@ namespace Basics
             }
                 );
 
-            services.AddRazorPages();
+            services.AddRazorPages()
+                .AddRazorPagesOptions(config =>
+                {
+                    config.Conventions.AuthorizePage("/Razor/SecuredPage");
+                }    
+                );
 
             services.AddHealthChecks(); /// what is it???
 
