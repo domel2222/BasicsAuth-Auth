@@ -83,6 +83,10 @@ namespace Basics
                 {
                     config.Conventions.AuthorizePage("/Razor/SecuredPage");
                     config.Conventions.AuthorizePage("/Razor/policy", "Admin");
+                    config.Conventions.AuthorizeFolder("/RazorSecure");
+                    config.Conventions.AuthorizeFolder("/RazorSecure", "Admin");
+                    config.Conventions.AllowAnonymousToPage("/RazorSecure/Anonymous");
+
                 }    
                 );
 
