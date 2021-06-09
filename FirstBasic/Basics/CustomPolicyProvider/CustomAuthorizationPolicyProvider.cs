@@ -8,7 +8,13 @@ using System.Threading.Tasks;
 
 namespace Basics.CustomPolicyProvider
 {
-
+    public class SecurityLevel : AuthorizeAttribute
+    {
+        public SecurityLevel(int level)
+        {
+            Policy = $"{DynamicPolicies.SecurityLevel}.{level}";
+        }
+    }
     //{type}
     public static class DynamicPolicies
     {
@@ -19,7 +25,6 @@ namespace Basics.CustomPolicyProvider
             yield return Rank;
 
         }
-
         public const string SecurityLevel = "SecurityLevel";
         public const string Rank = "Rank";
     }
@@ -31,9 +36,6 @@ namespace Basics.CustomPolicyProvider
             var parts = policyName.Split('.');
             var type = parts.First();
             var value = parts.Last();
-
-
-
             //switch (type)
             //{
             //    case DynamicPolicies.Rank:
@@ -51,16 +53,12 @@ namespace Basics.CustomPolicyProvider
                 DynamicPolicies.SecurityLevel => new AuthorizationPolicyBuilder()
                                                 .AddRequirements(new SecurityLevelRequirement(Convert.ToInt32(value)))
                                                 .Build(),
-
                 //_ => throw new NotImplementedException(),
                 _ => null,
 
             });
-
             return typeDynamic;
         }
-
-
     }
 
     public class SecurityLevelRequirement : IAuthorizationRequirement
@@ -72,8 +70,6 @@ namespace Basics.CustomPolicyProvider
             Level = level;
         }
     }
-
-
     public class SecuriityLevelHandler : AuthorizationHandler<SecurityLevelRequirement>
     {
         protected override Task HandleRequirementAsync(
@@ -88,7 +84,6 @@ namespace Basics.CustomPolicyProvider
             {
                 context.Succeed(requirement);
             }
-
             return Task.CompletedTask;
         }
     }
@@ -98,8 +93,6 @@ namespace Basics.CustomPolicyProvider
         public CustomAuthorizationPolicyProvider(IOptions<AuthorizationOptions> options) : base(options)
         {
         }
-
-
         //{type}.{value}
         public override Task<AuthorizationPolicy> GetPolicyAsync(string policyName)
         {

@@ -1,5 +1,6 @@
 using Basics.AuthorizationRequirements;
 using Basics.Controllers;
+using Basics.CustomPolicyProvider;
 using Basics.Transformers;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authorization;
@@ -76,9 +77,12 @@ namespace Basics
                 config.Filters.Add(new AuthorizeFilter(defaultAuthPolicy));
             }
                 );
+
             services.AddScoped<IAuthorizationHandler, CustomRequireClaimsHandler>();
             services.AddScoped<IAuthorizationHandler, WokkieBoxAuthorizationHandler>();
+            services.AddScoped<IAuthorizationHandler, SecuriityLevelHandler>();
             services.AddScoped<IClaimsTransformation, ClaimsTransformation>();
+            services.AddSingleton<IAuthorizationPolicyProvider, CustomAuthorizationPolicyProvider>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
