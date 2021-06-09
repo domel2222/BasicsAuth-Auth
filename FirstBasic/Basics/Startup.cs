@@ -78,12 +78,18 @@ namespace Basics
             }
                 );
 
+            services.AddRazorPages();
+
+            services.AddHealthChecks(); /// what is it???
+
             services.AddScoped<IAuthorizationHandler, CustomRequireClaimsHandler>();
             services.AddScoped<IAuthorizationHandler, WokkieBoxAuthorizationHandler>();
             services.AddScoped<IAuthorizationHandler, SecuriityLevelHandler>();
             services.AddScoped<IClaimsTransformation, ClaimsTransformation>();
             services.AddSingleton<IAuthorizationPolicyProvider, CustomAuthorizationPolicyProvider>();
         }
+
+
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
@@ -108,6 +114,8 @@ namespace Basics
             app.UseEndpoints(endpoints =>
             {
                 endpoints.MapDefaultControllerRoute();
+                endpoints.MapRazorPages();
+                //endpoints.MapHealthChecks();
             });
         }
     }
