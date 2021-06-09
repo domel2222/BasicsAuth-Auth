@@ -42,6 +42,14 @@ namespace Basics.CustomPolicyProvider
             //        return new AuthorizationPolicyBuilder()
             //                .RequireClaim("Rank", value)
             //                .Build();
+
+            //    case DynamicPolicies.SecurityLevel:
+            //        return new AuthorizationPolicyBuilder()
+            //                                    .AddRequirements(new SecurityLevelRequirement(Convert.ToInt32(value)))
+            //                                    .Build();
+            //    default:
+            //        return null;
+
             //}
 
             var typeDynamic = (type switch
@@ -80,7 +88,7 @@ namespace Basics.CustomPolicyProvider
                                 .FirstOrDefault(x => x.Type == DynamicPolicies.SecurityLevel)
                                     ?.Value ?? "0");
 
-            if (requirement.Level >= claimValue)
+            if (requirement.Level <= claimValue)
             {
                 context.Succeed(requirement);
             }

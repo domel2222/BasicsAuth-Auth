@@ -61,11 +61,12 @@ namespace Basics.Controllers
         {
             var supaClaims = new List<Claim>()
             {
-                new Claim(ClaimTypes.Name, "Bob"),
+                new Claim(ClaimTypes.Name, "NANANBob"),
                 new Claim(ClaimTypes.Email, "Bob@fmail.com"),
                 new Claim(ClaimTypes.DateOfBirth, "11/11/2001"),
                 new Claim(ClaimTypes.Role, "Admin"),
                 new Claim(DynamicPolicies.SecurityLevel, "7"),
+                new Claim(ClaimTypes.Gender, "Man"),
                 new Claim("Jhons.Says", "Good Boys"),
             };
             var licenseClaims = new List<Claim>()
@@ -74,7 +75,7 @@ namespace Basics.Controllers
                 new Claim("DrivingLicencse", "A+")
             };
 
-            var personalIdentity = new ClaimsIdentity(supaClaims, "Jhons Identity");
+            var personalIdentity = new ClaimsIdentity(supaClaims, "Jhons Papa Identity");
             var licenseIdentity = new ClaimsIdentity(licenseClaims, "Government");
 
 

@@ -74,7 +74,7 @@ namespace Basics
                     .RequireAuthenticatedUser()
                     .Build();
                 //global filter
-                config.Filters.Add(new AuthorizeFilter(defaultAuthPolicy));
+                //config.Filters.Add(new AuthorizeFilter(defaultAuthPolicy));
             }
                 );
 
