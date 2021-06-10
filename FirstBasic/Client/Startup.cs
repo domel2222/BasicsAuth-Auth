@@ -27,6 +27,11 @@ namespace Client
                 .AddCookie("ClientCookie")
                 .AddOAuth("OurServer", config =>
                 {
+                    config.ClientId = "client_id";
+                    config.ClientSecret = "client_secret";
+                    config.CallbackPath = "/oauth/callback";
+                    config.AuthorizationEndpoint = "https://localhost:44363/oauth/authorize";
+                    config.TokenEndpoint = "https://localhost:44363/oauth/token";
                 });
 
             services.AddControllersWithViews();
