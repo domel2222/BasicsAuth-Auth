@@ -1,8 +1,12 @@
 ﻿using Microsoft.AspNetCore.Http.Extensions;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.IdentityModel.Tokens;
+using Server;
 using System;
 using System.Collections.Generic;
+using System.IdentityModel.Tokens.Jwt;
 using System.Linq;
+using System.Security.Claims;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -22,6 +26,7 @@ namespace Client.Controllers
             query.Add("redirectUri", redirect_uri);
             query.Add("state", state);
             
+            
             return View(model: query.ToString());
         }
 
@@ -32,12 +37,50 @@ namespace Client.Controllers
             string state)
         {
             const string code = "LaLALaLA";
-            return Redirect("");
+
+            var query = new QueryBuilder();
+            query.Add("code", code);
+            query.Add("state", state);
+            return Redirect($"{redirectUri}{query.ToString()}");
             //return View();
         }
-        public IActionResult Token()
+        public IActionResult Token(
+            string grant_type, //flow of access_token request
+            string code,  // confirmation of the authentication 
+            string redirect_uri,
+            string client_id)
         {
-            
+
+            // some mechanism for validation the code
+            var claims = new[]
+            {
+                new Claim(JwtRegisteredClaimNames.Sub, "some_id"),
+                new Claim("wookie", "cookie")
+
+            };
+
+            //JsonConvert.DeserializeObject<TypeFilterAttribute>
+
+
+            var secretBytes = Encoding.UTF8.GetBytes(Constants.Secret);
+            var key = new SymmetricSecurityKey(secretBytes);
+            var algorithm = SecurityAlgorithms.HmacSha256;
+
+
+            var signingCredencial = new SigningCredentials(key, algorithm);
+
+            var token = new JwtSecurityToken(
+                Constants.Issuer,
+                Constants.Audiance,
+                claims,
+                notBefore: DateTime.Now,
+                expires: DateTime.Now.AddHours(1),
+                signingCredencial
+                );
+
+            var tokenJson = new JwtSecurityTokenHandler().WriteToken(token);
+
+            //return Ok(new { access_token = tokenJson });
             return View();
         }
 

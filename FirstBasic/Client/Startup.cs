@@ -35,7 +35,8 @@ namespace Client
                 
                 });
 
-            services.AddControllersWithViews();
+            services.AddControllersWithViews()
+                .AddRazorRuntimeCompilation();
         }
 
 
