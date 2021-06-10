@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Http.Extensions;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.IdentityModel.Tokens;
+using Newtonsoft.Json;
 using Server;
 using System;
 using System.Collections.Generic;
@@ -44,7 +45,7 @@ namespace Client.Controllers
             return Redirect($"{redirectUri}{query.ToString()}");
             //return View();
         }
-        public IActionResult Token(
+        public async Task<IActionResult> Token(
             string grant_type, //flow of access_token request
             string code,  // confirmation of the authentication 
             string redirect_uri,
@@ -78,10 +79,26 @@ namespace Client.Controllers
                 signingCredencial
                 );
 
-            var tokenJson = new JwtSecurityTokenHandler().WriteToken(token);
+            var access_token = new JwtSecurityTokenHandler().WriteToken(token);
 
+
+            var responseObject = new
+            {
+                access_token,
+                token_type = "Bearer",
+                raw_claim = "oauthTest"
+            };
+
+
+            var responseJson = JsonConvert.SerializeObject(responseObject);
+
+            var responseBytes = Encoding.UTF8.GetBytes(responseJson);
+
+            await Response.Body.WriteAsync(responseBytes, 0, responseBytes.Length);
+
+            return Redirect(redirect_uri);
             //return Ok(new { access_token = tokenJson });
-            return View();
+            //return View();
         }
 
     }

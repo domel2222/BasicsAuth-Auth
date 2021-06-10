@@ -32,6 +32,8 @@ namespace Client
                     config.CallbackPath = "/oauth/callback";
                     config.AuthorizationEndpoint = "https://localhost:44363/oauth/authorize";
                     config.TokenEndpoint = "https://localhost:44363/oauth/token";
+
+                    config.SaveTokens = true;
                 
                 });
 
