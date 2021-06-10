@@ -57,6 +57,10 @@ namespace Server.Controllers
             //return RedirectToAction("Index");
         }
 
-
+        public IActionResult Decode(string part)
+        {
+            var bytes = Convert.FromBase64String(part);
+            return Ok(Encoding.UTF8.GetString(bytes));
+        }
     }
 }
