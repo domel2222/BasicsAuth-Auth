@@ -40,6 +40,7 @@ namespace Server
                         }
                     };
 
+                    // access to the secure key
                     config.TokenValidationParameters = new TokenValidationParameters()
                     {
                         ValidIssuer = Constants.Issuer,
