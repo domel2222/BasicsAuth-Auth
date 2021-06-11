@@ -25,11 +25,23 @@ namespace API.JWTRequirements
             _client = httpClientFactory.CreateClient();
             _httpContext = httpContextAccessor.HttpContext;
         }
-        protected override Task HandleRequirementAsync(
+        protected override async Task HandleRequirementAsync(
                 AuthorizationHandlerContext context, 
                 JwtRequirement requirement)
         {
-            
+            if (_httpContext.Request.Headers.TryGetValue("Authorization", out var authHeader))
+            {
+                var accessToken = authHeader.ToString().Split(' ')[1];
+
+                var response = await _client
+                    .GetAsync($"https://localhost:44363/oauth/validate?access_token={accessToken}");
+
+                if (response.StatusCode == System.Net.HttpStatusCode.OK)
+                {
+                    context.Succeed(requirement);
+                }
+
+            }
         }
     }
 }
