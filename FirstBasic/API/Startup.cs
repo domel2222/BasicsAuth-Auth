@@ -1,4 +1,5 @@
 using API.JWTRequirements;
+using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
@@ -37,7 +38,7 @@ namespace API
 
             services.AddHttpClient()
                 .AddHttpContextAccessor();  // will allow to inject the or rather have access to the HTTP
-            services.AddConnections();
+            services.AddControllers();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -49,6 +50,7 @@ namespace API
             }
 
             app.UseRouting();
+
             app.UseAuthentication();
 
             app.UseAuthorization();
@@ -56,7 +58,7 @@ namespace API
 
             app.UseEndpoints(endpoints =>
             {
-                //endpoints.MapDefaultControllerRoute();
+                endpoints.MapDefaultControllerRoute();
             });
         }
     }

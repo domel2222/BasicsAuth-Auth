@@ -34,7 +34,7 @@ namespace Client.Controllers
             var serverResponse = await __client.GetAsync("https://localhost:44363/secret/index");
 
             var apiResponse = await __client.GetAsync("https://localhost:44373/secret/index");
-        
+
             return View();
         }
     }
