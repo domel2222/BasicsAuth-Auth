@@ -17,13 +17,13 @@ namespace API.JWTRequirements
     public class JwtRequirementHandler : AuthorizationHandler<JwtRequirement>
     {
         private readonly HttpClient _client;
-        private readonly IHttpContextAccessor _httpContextAccessor;
+        private readonly  HttpContext _httpContext;
 
         public JwtRequirementHandler(IHttpClientFactory httpClientFactory,
                                        IHttpContextAccessor httpContextAccessor)
         {
             _client = httpClientFactory.CreateClient();
-            this._httpContextAccessor = httpContextAccessor;
+            _httpContext = httpContextAccessor.HttpContext;
         }
         protected override Task HandleRequirementAsync(
                 AuthorizationHandlerContext context, 
