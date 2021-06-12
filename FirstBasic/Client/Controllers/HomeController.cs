@@ -30,34 +30,65 @@ namespace Client.Controllers
         [Authorize]
         public async Task<IActionResult> Secret()
         {
-            var token = await HttpContext.GetTokenAsync("access_token");
-            //var refreshToken = await HttpContext.GetTokenAsync("refresh_token");
+            var serverUrl = "https://localhost:44363/secret/index";
+            var apiUrl = "https://localhost:44373/secret/index";
 
-            var serverClient = _httpClientFactory.CreateClient();
+            var serverResponse = await AccessTokenRefreshWrapper(
+                            () => SecuredGetRequest(serverUrl));
 
-            serverClient.DefaultRequestHeaders.Add("Authorization", $"Bearer {token}");
+            var apiResponse = await AccessTokenRefreshWrapper(
+                            () => SecuredGetRequest(apiUrl));
+            //var token = await HttpContext.GetTokenAsync("access_token");
+            ////var refreshToken = await HttpContext.GetTokenAsync("refresh_token");
 
-            var serverResponse = await serverClient.GetAsync("https://localhost:44363/secret/index");
+            //var serverClient = _httpClientFactory.CreateClient();
 
-            await RefreshAccessToken();
+            //serverClient.DefaultRequestHeaders.Add("Authorization", $"Bearer {token}");
 
-            var apiClient = _httpClientFactory.CreateClient();
+            //var serverResponse = await serverClient.GetAsync("https://localhost:44363/secret/index");
 
-            token = await HttpContext.GetTokenAsync("access_token");
+            //await RefreshAccessToken();
+
+            //var apiClient = _httpClientFactory.CreateClient();
+
+            //token = await HttpContext.GetTokenAsync("access_token");
 
 
-            apiClient.DefaultRequestHeaders.Add("Authorization", $"Bearer {token}");
+            //apiClient.DefaultRequestHeaders.Add("Authorization", $"Bearer {token}");
 
-            var apiResponse = await apiClient.GetAsync("https://localhost:44373/secret/index");
+            //var apiResponse = await apiClient.GetAsync("https://localhost:44373/secret/index");
 
             return View();
         }
+
+        private async Task<HttpResponseMessage> SecuredGetRequest(string url)
+        {
+            var token = await HttpContext.GetTokenAsync("access_token");
+            var client = _httpClientFactory.CreateClient();
+            client.DefaultRequestHeaders.Add("Authorization", $"Bearer {token}");
+
+            return await client.GetAsync(url);
+        }
         // add Flurl
         // we have configured our mechanisim  for requestin a new access token and we we are going to be passing refresh token 
-        public async Task<string> RefreshAccessToken()
+        //public async Task<string> RefreshAccessToken()
+        public async Task<string> AccessTokenRefreshWrapper(
+            Func<Task<HttpResponseMessage>> initialRequest)
         {
-        
 
+            var response = await initialRequest();
+
+            if (response.StatusCode == System.Net.HttpStatusCode.Unauthorized)
+            {
+                await RefreshAccessToken();
+                response = await initialRequest();
+            }
+
+            return "";
+            
+        }
+        private async Task RefreshAccessToken()
+        {
             var refreshToken = await HttpContext.GetTokenAsync("refresh_token");
 
             var refreshTokenCLient = _httpClientFactory.CreateClient();
@@ -97,9 +128,6 @@ namespace Client.Controllers
 
 
             await HttpContext.SignInAsync("ClientCookie", authInfo.Principal, authInfo.Properties);
-
-            return "";
-            
         }
 
 
