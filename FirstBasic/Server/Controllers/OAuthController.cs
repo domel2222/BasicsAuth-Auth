@@ -50,7 +50,8 @@ namespace Client.Controllers
             string grant_type, //flow of access_token request
             string code,  // confirmation of the authentication 
             string redirect_uri,
-            string client_id)
+            string client_id,
+            string refresh_token)
         {
 
             // some mechanism for validation the code
@@ -76,7 +77,9 @@ namespace Client.Controllers
                 Constants.Audiance,
                 claims,
                 notBefore: DateTime.Now,
-                expires: DateTime.Now.AddHours(1),
+                expires: grant_type == "refresh_token"
+                ? DateTime.Now.AddMinutes(5) 
+                : DateTime.Now.AddMilliseconds(1),
                 signingCredencial
                 );
 
@@ -87,7 +90,8 @@ namespace Client.Controllers
             {
                 access_token,
                 token_type = "Bearer",
-                raw_claim = "oauthTest"
+                raw_claim = "oauthTest",
+                refresh_token = "RefreshTokenSampleValueNANNANANANAN"
             };
 
 
