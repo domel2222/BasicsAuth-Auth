@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -36,14 +37,17 @@ namespace Client.Controllers
 
             var serverResponse = await _client.GetAsync("https://localhost:44363/secret/index");
 
+            await RefreshAccessToken();
+
             var apiResponse = await _client.GetAsync("https://localhost:44373/secret/index");
 
             return View();
         }
         // add Flurl
+        // we have configured our mechanisim  for requestin a new access token and we we are going to be passing refresh token 
         public async Task<string> RefreshAccessToken()
         {
-        https://localhost:44373/secret/index
+        
 
             var refreshToken = await HttpContext.GetTokenAsync("refresh_token");
 
@@ -55,7 +59,7 @@ namespace Client.Controllers
                 ["refresh_token"] = refreshToken,
             };
 
-            var request = new HttpRequestMessage(HttpMethod.Post, "https://localhost:44373/oauth/token")
+            var request = new HttpRequestMessage(HttpMethod.Post, "https://localhost:44363/oauth/token")
             {
                 Content = new FormUrlEncodedContent(requestData)
             };
@@ -68,6 +72,22 @@ namespace Client.Controllers
             request.Headers.Add("Authorization", $"Basic {base64Credentials}");
 
             var response = await refreshTokenCLient.SendAsync(request);
+
+            var responseString = await response.Content.ReadAsStringAsync();
+            var responseData = JsonConvert.DeserializeObject<Dictionary<string, string>>(responseString);
+
+            var newAccessToken = responseData.GetValueOrDefault("access_token");
+            var newRefreshToken = responseData.GetValueOrDefault("refresh_token");
+
+
+            var authInfo = await HttpContext.AuthenticateAsync("ClientCookie");
+
+            authInfo.Properties.UpdateTokenValue("access_token", newAccessToken);
+            authInfo.Properties.UpdateTokenValue("refresh_token", newRefreshToken);
+
+
+
+            await HttpContext.SignInAsync("ClientCookie", authInfo.Principal, authInfo.Properties);
 
             return "";
             
