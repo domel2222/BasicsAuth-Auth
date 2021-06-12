@@ -28,6 +28,8 @@ namespace Client.Controllers
 
 
         [Authorize]
+        // will not get your refresh token refresh token it's meant to be very secured and is not meant ot leak outside into the real world 
+        // it is mean to stay in the back channels
         public async Task<IActionResult> Secret()
         {
             var serverUrl = "https://localhost:44363/secret/index";
