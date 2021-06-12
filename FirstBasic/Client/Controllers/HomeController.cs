@@ -13,13 +13,13 @@ namespace Client.Controllers
 {
     public class HomeController : Controller
     {
-        private readonly HttpClient _client;
+        //private readonly HttpClient _client;
         private readonly IHttpClientFactory _httpClientFactory;
 
         public HomeController(IHttpClientFactory httpClientFactory)
         {
             _httpClientFactory = httpClientFactory;
-            _client = httpClientFactory.CreateClient(); 
+            //_client = httpClientFactory.CreateClient(); 
         }
         public IActionResult Index()
         {
@@ -31,15 +31,24 @@ namespace Client.Controllers
         public async Task<IActionResult> Secret()
         {
             var token = await HttpContext.GetTokenAsync("access_token");
-            var refreshToken = await HttpContext.GetTokenAsync("refresh_token");
+            //var refreshToken = await HttpContext.GetTokenAsync("refresh_token");
 
-            _client.DefaultRequestHeaders.Add("Authorization", $"Bearer {token}");
+            var serverClient = _httpClientFactory.CreateClient();
 
-            var serverResponse = await _client.GetAsync("https://localhost:44363/secret/index");
+            serverClient.DefaultRequestHeaders.Add("Authorization", $"Bearer {token}");
+
+            var serverResponse = await serverClient.GetAsync("https://localhost:44363/secret/index");
 
             await RefreshAccessToken();
 
-            var apiResponse = await _client.GetAsync("https://localhost:44373/secret/index");
+            var apiClient = _httpClientFactory.CreateClient();
+
+            token = await HttpContext.GetTokenAsync("access_token");
+
+
+            apiClient.DefaultRequestHeaders.Add("Authorization", $"Bearer {token}");
+
+            var apiResponse = await apiClient.GetAsync("https://localhost:44373/secret/index");
 
             return View();
         }
