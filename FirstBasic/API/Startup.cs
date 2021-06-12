@@ -21,7 +21,8 @@ namespace API
         public void ConfigureServices(IServiceCollection services)
         {
 
-            services.AddAuthentication();
+            services.AddAuthentication("DefaultAuth")
+                .AddScheme<AuthenticationSchemeOptions, CustomAuthenticationHandler>("DefaultAuth", null);
 
             // use extension OICD 
             services.AddAuthorization(config =>
