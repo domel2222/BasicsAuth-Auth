@@ -43,10 +43,17 @@ namespace ApiTwo.Controllers
                 );
             //retrive secret data
 
+            var apiClient = _httpClientFactory.CreateClient();
 
+            apiClient.SetBearerToken(tokenResponse.AccessToken);
+
+            var response = await apiClient.GetAsync("https://localhost:44338/secret");
+
+            var content = await response.Content.ReadAsStringAsync();
             return Ok(new
             {
-
+                access_token = tokenResponse.AccessToken,
+                message = content
             });
         }
     }
