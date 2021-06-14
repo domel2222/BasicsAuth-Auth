@@ -8,21 +8,24 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace IdentityServer
+namespace ApiOne
 {
     public class Startup
     {
+        
+
         // This method gets called by the runtime. Use this method to add services to the container.
         // For more information on how to configure your application, visit https://go.microsoft.com/fwlink/?LinkID=398940
         public void ConfigureServices(IServiceCollection services)
         {
-            services.AddIdentityServer()
-                .AddInMemoryApiResources(Configuration.GetApis())
-                .AddInMemoryClients(Configuration.GeClients())
-                .AddDeveloperSigningCredential();
+            services.AddAuthentication("Bearer")
+                .AddJwtBearer("Bearer", config =>
+                {
+                    config.Authority = "https://localhost:44303/";
+                    config.Audience = "ApiOne";
+                });
 
-
-            services.AddControllersWithViews();        
+            services.AddControllers();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -35,11 +38,13 @@ namespace IdentityServer
 
             app.UseRouting();
 
-            app.UseIdentityServer();
-            // endpiont .well-known/openid-configuration
+            app.UseAuthentication();
+
+            app.UseAuthorization();
+
             app.UseEndpoints(endpoints =>
             {
-                endpoints.MapDefaultControllerRoute();
+                endpoints.MapControllers();
             });
         }
     }
