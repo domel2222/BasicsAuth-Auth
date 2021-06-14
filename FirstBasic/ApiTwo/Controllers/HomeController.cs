@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using IdentityModel.Client;
+using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -22,6 +23,24 @@ namespace ApiTwo.Controllers
         {
             //retrive access token
 
+            var serverClient = _httpClientFactory.CreateClient();
+
+
+            //all information about our identity server right so once 
+            var discoveryDocument = await serverClient.GetDiscoveryDocumentAsync("https://localhost:44303/");
+
+
+            var tokenResponse = await serverClient.RequestClientCredentialsTokenAsync(
+                new ClientCredentialsTokenRequest
+                {
+                    Address = discoveryDocument.TokenEndpoint,
+
+                    ClientId = "client_id",
+                    ClientSecret = "client_secret",
+
+                    Scope = "ApiOne",
+                }
+                );
             //retrive secret data
 
 
