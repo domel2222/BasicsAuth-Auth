@@ -25,6 +25,8 @@ namespace ApiOne
                     config.Audience = "ApiOne";
                 });
 
+
+            services.AddHttpClient();
             services.AddControllers();
         }
 

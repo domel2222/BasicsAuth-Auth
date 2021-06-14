@@ -9,6 +9,11 @@ using System.Threading.Tasks;
 
 namespace ApiTwo.Controllers
 {
+    /// <summary>
+    /// //API TWO IS A CLIENT
+    /// </summary>
+    
+
     public class HomeController : Controller
     {
         private readonly IHttpClientFactory _httpClientFactory;
@@ -18,7 +23,7 @@ namespace ApiTwo.Controllers
             this._httpClientFactory = httpClientFactory;
         }
 
-
+        [Route("/")]
         public async Task<IActionResult> Index()
         {
             //retrive access token

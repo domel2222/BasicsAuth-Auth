@@ -16,6 +16,14 @@ namespace IdentityServer
             };
 
 
+        public static IEnumerable<ApiScope> Scopes
+        {
+            get
+            {
+                return new List<ApiScope> { new ApiScope("ApiOne") };
+            }
+        }
+
         public static IEnumerable<Client> GeClients() =>
             new List<Client>
             {
