@@ -13,6 +13,7 @@ namespace IdentityServer
         public static IEnumerable<ApiResource> GetApis() =>
             new List<ApiResource> {
                 new ApiResource ("ApiOne"),
+                new ApiResource ("ApiTwo"),
             };
 
 
@@ -20,7 +21,7 @@ namespace IdentityServer
         {
             get
             {
-                return new List<ApiScope> { new ApiScope("ApiOne") };
+                return new List<ApiScope> { new ApiScope("ApiOne")};
             }
         }
 
@@ -35,6 +36,15 @@ namespace IdentityServer
                 AllowedGrantTypes = GrantTypes.ClientCredentials,
 
                 AllowedScopes = {"ApiOne"}
+            },
+            new Client
+            {
+                ClientId = "client_id_mvc",
+                ClientSecrets = { new Secret("client_secret".ToSha256())},
+
+                AllowedGrantTypes = GrantTypes.Code,
+
+                AllowedScopes = {"ApiOne", "ApiTwo"}
             }
             };
     }
