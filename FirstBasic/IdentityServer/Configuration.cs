@@ -1,4 +1,5 @@
 ﻿using IdentityModel;
+using IdentityServer4;
 using IdentityServer4.Models;
 using System;
 using System.Collections.Generic;
@@ -10,11 +11,16 @@ namespace IdentityServer
 {
     public static class Configuration
     {
+        /// <summary>
+        /// register open id as resource thst csn be accessed
+        /// </summary>
+        /// <returns></returns>
         public static IEnumerable<IdentityResource> GetIdentityResources() =>
             new List<IdentityResource>
             {
                 new IdentityResources.OpenId(),
-                //new IdentityResources.Profile()
+                new IdentityResources.Profile()
+                //new IdentityResources.Email();
 
             };
 
@@ -53,7 +59,10 @@ namespace IdentityServer
                 AllowedGrantTypes = GrantTypes.Code,
 
                 RedirectUris = { "https://localhost:44389/signin-oidc" },
-                AllowedScopes = {"ApiOne", "ApiTwo"}
+                AllowedScopes = {"ApiOne", "ApiTwo", 
+                    IdentityServerConstants.StandardScopes.OpenId,
+                    IdentityServerConstants.StandardScopes.Profile
+                    }
             }
             };
     }
