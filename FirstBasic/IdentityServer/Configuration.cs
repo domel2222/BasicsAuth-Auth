@@ -10,6 +10,14 @@ namespace IdentityServer
 {
     public static class Configuration
     {
+        public static IEnumerable<IdentityResource> GetIdentityResources() =>
+            new List<IdentityResource>
+            {
+                new IdentityResources.OpenId(),
+                //new IdentityResources.Profile()
+
+            };
+
         public static IEnumerable<ApiResource> GetApis() =>
             new List<ApiResource> {
                 new ApiResource ("ApiOne"),
@@ -21,7 +29,7 @@ namespace IdentityServer
         {
             get
             {
-                return new List<ApiScope> { new ApiScope("ApiOne")};
+                return new List<ApiScope> { new ApiScope("ApiOne"), new ApiScope("ApiTwo") };
             }
         }
 
@@ -44,6 +52,7 @@ namespace IdentityServer
 
                 AllowedGrantTypes = GrantTypes.Code,
 
+                RedirectUris = { "https://localhost:44389/signin-oidc" },
                 AllowedScopes = {"ApiOne", "ApiTwo"}
             }
             };

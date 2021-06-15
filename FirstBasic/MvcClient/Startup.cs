@@ -16,6 +16,22 @@ namespace MvcClient
         // For more information on how to configure your application, visit https://go.microsoft.com/fwlink/?LinkID=398940
         public void ConfigureServices(IServiceCollection services)
         {
+            services.AddAuthentication(config =>
+            {
+                config.DefaultScheme = "Cookie";
+                config.DefaultChallengeScheme = "Oidc";
+            })
+                .AddCookie("Cookie")
+                .AddOpenIdConnect("Oidc", config =>
+                {
+                    config.Authority = "https://localhost:44303/";
+                    config.ClientId = "client_id_mvc";
+                    config.ClientSecret = "client_secret_mvc";
+                    config.SaveTokens = true;
+
+                    config.ResponseType = "code"; 
+                });
+            services.AddControllersWithViews();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -28,12 +44,13 @@ namespace MvcClient
 
             app.UseRouting();
 
+            app.UseAuthentication();
+
+            app.UseAuthorization();
+
             app.UseEndpoints(endpoints =>
             {
-                endpoints.MapGet("/", async context =>
-                {
-                    await context.Response.WriteAsync("Hello World!");
-                });
+                endpoints.MapDefaultControllerRoute();
             });
         }
     }
